@@ -1,6 +1,6 @@
 # Kaminari Cache
 
-Kaminari Cache makes caching your Kaminari pagination a breeze.
+Kaminari Cache makes caching your Kaminari pagination a breeze
 
 ### Currently supported:
 * RedisStore for Redis
@@ -9,13 +9,21 @@ Kaminari Cache makes caching your Kaminari pagination a breeze.
 
 When using an unsupported cache engine, the entire cache will be flushed when editing a record.
 
+## Installation
+
+Add this line to your application's Gemfile:
+
+```ruby
+gem 'kaminari-cache'
+```
+
 ## Usage
 
 In your controller, simply call `Model.fetch_page` (instead of `Model.page`) with an options hash containing `:page`, `:per` & `:order`.
 
 `:order` can be a Symbol, a Hash or a String depending on your sorting needs.
 
-Example:
+#### Example:
 
 In your controller:
 ```ruby
@@ -37,7 +45,7 @@ In your view:
 ## TODO
 
 * Testing!
-* More cache engines!
+* More cache engines
 
 ## Contributing to Kaminari Cache
  
@@ -51,6 +59,6 @@ In your view:
 
 ## Copyright
 
-Copyright (c) 2013 Jim. See LICENSE.txt for
+Copyright © 2013-2014 [Jim Durand](http://twitter.com/durandjim "Twitter"). See [LICENSE.txt](http://github.com/jdurand/kaminari-cache/blob/master/LICENSE.txt "LICENSE") for
 further details.
 
