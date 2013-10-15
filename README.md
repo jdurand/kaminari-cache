@@ -7,6 +7,8 @@ Kaminari Cache makes caching your Kaminari pagination a breeze.
 * DalliStore for Memcached
   * Note that you will need the dalli-store-extensions gem because kaminari-cache makes use of the `delete_matched` method which is not in dalli gem
 
+When using an unsupported cache engine, the entire cache will be flushed when editing a record.
+
 ## Usage
 
 In your controller, simply call `Model.fetch_page` (instead of `Model.page`) with an options hash containing `:page`, `:per` & `:order`.
