@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    kaminari-cache (0.1.0)
+    kaminari-cache (0.1.1)
       kaminari-cache
 
 GEM
