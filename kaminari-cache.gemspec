@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = "kaminari-cache"
-  s.version = "0.1.0"
+  s.version = "0.1.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Jim"]
@@ -26,7 +26,6 @@ Gem::Specification.new do |s|
     "VERSION",
     "kaminari-cache.gemspec",
     "lib/kaminari-cache.rb",
-    "lib/kaminari-cache/version.rb",
     "test/helper.rb",
     "test/test_kaminari-cache.rb"
   ]
