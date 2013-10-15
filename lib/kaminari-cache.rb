@@ -60,14 +60,18 @@ module KaminariCache
     end
 
     def apply_sort(scope, order)
-      case order.class
+      case order
         when Symbol
           scope.order! order
         when String
           scope.order! order
         when Hash
           order.each do |k, v|
-            scope.order! "#{k.to_s} #{v.to_s}"
+            if v.empty?
+              scope.order! k
+            else
+              scope.order! "#{k.to_s} #{v.to_s}"
+            end
           end
       end
       scope
