@@ -17,9 +17,9 @@ Jeweler::Tasks.new do |gem|
   gem.name = "kaminari-cache"
   gem.homepage = "http://github.com/jdurand/kaminari-cache"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
-  gem.email = "jdurand@o2web.ca"
+  gem.summary = "Kaminari Cache makes caching your Kaminari pagination a breeze"
+  gem.description = "Kaminari Cache is a simple caching layer and sweeper for Kaminari pagination"
+  gem.email = "powerjim@gmail.com"
   gem.authors = ["Jim"]
   # dependencies defined in Gemfile
 end

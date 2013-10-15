@@ -1,6 +1,41 @@
 = kaminari-cache
 
-Description goes here.
+Kaminari Cache makes caching your Kaminari pagination a breeze.
+
+== Usage
+
+In your controller, simply call ```Model.fetch_page``` (instead of Model.page) with an options hash containing :page, :per & :order.
+
+Currently supported:
+* RedisStore for Redis
+* DalliStore for Memcached
+** Note that you will need the dalli-store-extensions gem because kaminari-cache makes use of the ```delete_matched``` method which is not in dalli gem
+
+:order can be a symbol, a hash or a string depending on your sorting needs.
+
+Example:
+
+In your controller:
+````
+  @events = Event.fetch_page :page => (params[:page] || 1),
+                   :per => 18,
+                   :order => {
+                     :start => :desc,
+                     :updated_at => :desc
+                   }
+````
+
+In your view:
+````
+  @events.entries.each do |entry|
+    # Do your thing
+  end
+````
+
+== TODO
+
+* Testing!
+* More cache engines!
 
 == Contributing to kaminari-cache
  
