@@ -28,6 +28,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'shoulda', ['>= 0']
   s.add_development_dependency 'capybara', ['>= 1.0']
   s.add_development_dependency 'rdoc', ['>= 0']
-  s.add_development_dependency 'jeweler', ['~> 1.8.7']
-  s.add_development_dependency 'rcov', ['>= 0']
+  s.add_development_dependency 'jeweler', ['>= 0']
+  s.add_development_dependency 'simplecov-rcov', ['>= 0']
 end
