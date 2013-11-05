@@ -40,13 +40,10 @@ module KaminariCache
       entries = Rails.cache.fetch(cache_key(options)) do
         scope = self.page(options[:page]).per(options[:per])
         scope = apply_sort(scope, options[:order])
-
-        struct = OpenStruct.new(
-          :entries => scope.entries,
-          :all => scope.entries,
-          :current_page => scope.current_page,
-          :total_pages => scope.total_pages,
-          :per_page => scope.limit_value
+        Kaminari::PaginatableArray.new(scope.to_a,
+          :limit => scope.limit_value,
+          :offset => scope.offset_value,
+          :total_count => scope.total_count
         )
       end
     end

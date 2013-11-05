@@ -37,7 +37,7 @@ In your controller:
 
 In your view:
 ```ruby
-  @events.entries.each do |entry|
+  @events.each do |entry|
     # Do your thing
   end
 ```
