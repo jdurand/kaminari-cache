@@ -37,9 +37,12 @@ module KaminariCache
         :page => 1,
         :per => Kaminari.config.max_per_page || Kaminari.config.default_per_page
       )
-      entries = Rails.cache.fetch(cache_key(options)) do
+      key = cache_key(options)
+      entries = Rails.cache.fetch(key) do
+        Rails.logger.info "Cache miss: #{key.to_s}"
         scope = self.page(options[:page]).per(options[:per])
-        scope = apply_sort(scope, options[:order])
+        scope = apply_sort(scope, options[:order]) if options[:order]
+        scope = apply_locale(scope, options[:locale]) if options[:locale]
         Kaminari::PaginatableArray.new(scope.to_a,
           :limit => scope.limit_value,
           :offset => scope.offset_value,
@@ -48,32 +51,53 @@ module KaminariCache
       end
     end
 
-    def cache_key(options)
-      key = [:kaminari, self.name.downcase]
-      key << options[:page]
-      key << options[:per]
-      key << ["order", options[:order]] if options[:order]
-      key
-    end
-
-    def apply_sort(scope, order)
-      case order
-        when Symbol
-          scope.order! order
-        when String
-          scope.order! order
-        when Hash
-          order.each do |k, v|
-            if v.empty?
-              scope.order! k
-            else
-              scope.order! "#{k.to_s} #{v.to_s}"
-            end
-          end
+    private
+      def cache_key(options)
+        key = [:kaminari, self.name.pluralize.downcase]
+        key << options[:page]
+        key << options[:per]
+        key << [:locale, options[:locale]] if options[:locale]
+        key << [:order, options[:order]] if options[:order]
+        expanded_key(key)
       end
-      scope
+
+      def expanded_key(key)
+        return key.cache_key.to_s if key.respond_to?(:cache_key)
+        case key
+          when Array
+            if key.size > 1
+              key = key.collect{|element| expanded_key(element)}
+            else
+              key = key.first
+            end
+          when Hash
+            key = key.sort_by { |k,_| k.to_s }.collect{|k,v| "#{k}=#{v}"}
+        end
+        key.to_param
+      end
+
+      def apply_sort(scope, order)
+        case order
+          when Symbol
+            scope.order! order
+          when String
+            scope.order! order
+          when Hash
+            order.each do |k, v|
+              if v.empty?
+                scope.order! k
+              else
+                scope.order! "#{k.to_s} #{v.to_s}"
+              end
+            end
+        end
+        scope
+      end
+      def apply_locale(scope, locale)
+        scope = scope.with_translations(locale) if scope.respond_to? :with_translations
+        scope
+      end
     end
-  end
 end
 
 ActiveRecord::Base.send(:include, KaminariCache)
