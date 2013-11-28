@@ -42,6 +42,18 @@ In your view:
   end
 ```
 
+**Note** that `fetch_page` returns an array of type `Kaminari::PaginatableArray` so if you use something like *Draper* which decorates *ActiveRecord* collections, you'll need to decorate them manualy and delegate the needed methods:
+
+In an initializer (config/initializers/draper.rb):
+```ruby
+  Draper::CollectionDecorator.delegate :current_page, :total_pages, :limit_value, :total_count
+```
+
+In your controller:
+```ruby
+  @events = Draper::CollectionDecorator.new Event.fetch_page(...)
+```
+
 ## TODO
 
 * Testing!
