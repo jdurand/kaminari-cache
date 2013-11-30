@@ -33,6 +33,9 @@ In your controller:
                      :start => :desc,
                      :updated_at => :desc
                    }
+                   # :locale => :fr,
+                   # :scope => :latest,
+                   # :includes => :occurrences
 ```
 
 In your view:

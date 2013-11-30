@@ -40,9 +40,11 @@ module KaminariCache
       key = cache_key(options)
       entries = Rails.cache.fetch(key) do
         Rails.logger.info "Cache miss: #{key.to_s}"
-        scope = self.page(options[:page]).per(options[:per])
-        scope = apply_sort(scope, options[:order]) if options[:order]
+        scope = self.send(options[:scope]) if options[:scope]
+        scope = (scope || self).page(options[:page]).per(options[:per])
         scope = apply_locale(scope, options[:locale]) if options[:locale]
+        scope = apply_includes(scope, options[:includes]) if options[:includes]
+        scope = apply_sort(scope, options[:order]) if options[:order]
         Kaminari::PaginatableArray.new(scope.to_a,
           :limit => scope.limit_value,
           :offset => scope.offset_value,
@@ -58,6 +60,8 @@ module KaminariCache
         key << options[:per]
         key << [:locale, options[:locale]] if options[:locale]
         key << [:order, options[:order]] if options[:order]
+        key << [:scope, options[:scope]] if options[:scope]
+        key << [:includes, options[:includes]] if options[:includes]
         expanded_key(key)
       end
 
@@ -95,6 +99,12 @@ module KaminariCache
       end
       def apply_locale(scope, locale)
         scope = scope.with_translations(locale) if scope.respond_to? :with_translations
+        scope
+      end
+      def apply_includes(scope, includes)
+        includes.each do |i|
+          scope = scope.includes(i)
+        end
         scope
       end
     end
