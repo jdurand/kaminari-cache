@@ -6,27 +6,31 @@ module KaminariCache
   end
   
   def flush_pagination_cache
-    store_class = Rails.cache.class.name.split("::").last
+    @store_class = Rails.cache.class.name.split("::").last
     if Rails.cache.respond_to? "delete_matched"
 
       self.changed.each do |field|
-        match = [:kaminari, "/#{self.class.name.downcase}", '*', "/#{:order}", '*', "/#{field}", '*']
-        
-        Rails.logger.info "Cache flush: #{match.join}"
-        case store_class
-        when "DalliStore"
-          # DalliStore uses a Regexp
-          regexp = Regexp.new match.join.gsub(/\*/,'.*?')
-          Rails.cache.delete_matched /^#{Regexp.escape(:kaminari)}\/#{Regexp.escape(self.class.name.downcase)}/
-        when "RedisStore"
-          # RedisStore uses a String
-          Rails.cache.delete_matched match.join
-        end
+        flush_match [:kaminari, "/#{self.class.name.downcase}", '*', "/#{:order}", '*', "/#{field}", '*']
       end
+      # flush scoped pagings...
+      flush_match [:kaminari, "/#{self.class.name.downcase}", '*', "/#{:scope}", '*']
 
     else
       Rails.cache.clear
-      Rails.logger.warn "#{store_class} does not support deleting matched keys. The entire cache was flushed. Consider using RedisStore (Redis) OR DalliStore (gem dalli) for memcached with dalli-store-extensions gem for improved performance."
+      Rails.logger.warn "#{@store_class} does not support deleting matched keys. The entire cache was flushed. Consider using RedisStore (Redis) OR DalliStore (gem dalli) for memcached with dalli-store-extensions gem for improved performance."
+    end
+  end
+
+  def flush_match(match) 
+    Rails.logger.info "Cache flush: #{match.join}"
+    case @store_class
+    when "DalliStore"
+      # DalliStore uses a Regexp
+      regexp = Regexp.new match.join.gsub(/\*/,'.*?')
+      Rails.cache.delete_matched /^#{Regexp.escape(:kaminari)}\/#{Regexp.escape(self.class.name.downcase)}/
+    when "RedisStore"
+      # RedisStore uses a String
+      Rails.cache.delete_matched match.join
     end
   end
   
