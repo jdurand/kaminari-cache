@@ -1,4 +1,14 @@
 source 'https://rubygems.org'
 
-# Specify your gem's dependencies in kaminari.gemspec
-gemspec
+gem 'rails'
+
+group :development, :test do
+  gem 'bundler'
+  gem 'rake'
+  gem 'rspec'
+  gem 'shoulda'
+  gem 'capybara'
+  gem 'rdoc'
+  gem 'jeweler'
+  gem 'simplecov-rcov'
+end
