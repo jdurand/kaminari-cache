@@ -1,5 +1,9 @@
 # Kaminari Cache
 
+**This gem is no longer maintained, and [I wouldn’t even recommend you use it](https://github.com/jdurand/kaminari-cache/issues/1)!**
+
+----------------------------------------------------------------
+
 Kaminari Cache makes caching your Kaminari pagination a breeze
 
 ### Currently supported:
